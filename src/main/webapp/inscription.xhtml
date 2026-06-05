@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Inscription - Gestion de Projet</title>
+</h:head>
+<h:body>
+    <h2>Inscription</h2>
+    <h:form id="registerForm">
+        <h:messages globalOnly="true" style="color:green;" />
+
+        <h:panelGrid columns="3">
+            <h:outputLabel for="nom" value="Nom :" />
+            <h:inputText id="nom" value="#{authBean.utilisateur.nom}" required="true" requiredMessage="Le nom est requis." />
+            <h:message for="nom" style="color:red;" />
+
+            <h:outputLabel for="prenom" value="Prénom :" />
+            <h:inputText id="prenom" value="#{authBean.utilisateur.prenom}" required="true" requiredMessage="Le prénom est requis." />
+            <h:message for="prenom" style="color:red;" />
+
+            <h:outputLabel for="email" value="Email :" />
+            <h:inputText id="email" value="#{authBean.utilisateur.email}" required="true" requiredMessage="L'email est requis.">
+                <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" />
+            </h:inputText>
+            <h:message for="email" style="color:red;" />
+
+            <h:outputLabel for="password" value="Mot de passe :" />
+            <h:inputSecret id="password" value="#{authBean.password}" required="true" requiredMessage="Le mot de passe est requis.">
+                <f:validateLength minimum="6" />
+            </h:inputSecret>
+            <h:message for="password" style="color:red;" />
+        </h:panelGrid>
+
+        <h:commandButton value="S'inscrire" action="#{authBean.register}" />
+    </h:form>
+    <p>Déjà membre ? <h:link outcome="connexion" value="Se connecter" /></p>
+</h:body>
+</html>

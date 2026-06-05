@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Tableau de Bord - Gestion de Projet</title>
+</h:head>
+<h:body>
+    <div style="max-width: 800px; margin: 30px auto;">
+        <h:panelGroup rendered="#{authBean.loggedIn}">
+            <h2>Bienvenue sur votre application de Gestion de Projet, #{authBean.userSession.prenom} #{authBean.userSession.nom} !</h2>
+            <p>Votre session est active. Vous êtes authentifié avec l'adresse : <strong>#{authBean.userSession.email}</strong></p>
+            
+            <h:form>
+                <h:commandButton value="Se déconnecter" action="#{authBean.logout}" style="background-color: #f44336; color: white; padding: 10px 15px; border: none; cursor: pointer;"/>
+            </h:form>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not authBean.loggedIn}">
+            <h:panelGrid columns="1">
+                <h:outputText value="Accès refusé. Vous devez être connecté pour voir cette page." style="color:red; font-size: 1.2em; font-weight: bold;" />
+                <br/>
+                <h:link outcome="connexion" value="Retourner à la page de connexion" />
+            </h:panelGrid>
+        </h:panelGroup>
+    </div>
+</h:body>
+</html>
