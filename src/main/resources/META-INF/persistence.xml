@@ -10,7 +10,10 @@
         
         <jta-data-source>java:global/datasources/gestionProjetDS</jta-data-source>
 
-        <class>com.exemple.entites.Utilisateur</class>
+        <class>com.exemple.entites.Utilisateur</class>        
+        <class>com.exemple.entites.Projet</class>
+        <class>com.exemple.entites.Tache</class>
+
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />

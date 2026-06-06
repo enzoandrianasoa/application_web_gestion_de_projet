@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Gestion des Tâches</title>
+</h:head>
+<h:body style="font-family: Arial, sans-serif; padding: 30px; background-color: #fafafa;">
+    <div style="max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        
+        <h:link outcome="dashboard" value="← Retour aux projets" style="color: #0056b3; text-decoration: none; font-weight: bold;" />
+        
+        <h2 style="margin-top: 20px; color: #2c3e50;">
+            Tâches du projet : <span style="color: #17a2b8;">#{tacheBean.projetSelectionne.titre}</span>
+        </h2>
+        <p style="color: #666; font-style: italic;">#{tacheBean.projetSelectionne.description}</p>
+        
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+
+        <h3>Ajouter une tâche</h3>
+        <h:form id="tacheForm">
+            <h:panelGrid columns="1" style="width: 100%; max-width: 500px;">
+                <h:outputLabel for="titre" value="Nom de la tâche :" style="font-weight: bold;" />
+                <h:inputText id="titre" value="#{tacheBean.nouvelleTache.titre}" required="true" 
+                             requiredMessage="Le nom de la tâche est obligatoire." style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                <h:message for="titre" style="color: red; font-size: 0.85em;" />
+
+                <h:outputLabel for="desc" value="Description / Notes :" style="font-weight: bold;" />
+                <h:inputTextarea id="desc" value="#{tacheBean.nouvelleTache.description}" rows="3" 
+                                 style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                
+                <h:commandButton value="Créer la tâche" action="#{tacheBean.enregistrer}" 
+                                 style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; width: 150px;" />
+            </h:panelGrid>
+        </h:form>
+
+        <br/><br/>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+
+        <h3>Liste des tâches</h3>
+        
+        <h:outputText value="Aucune tâche créée pour le moment." rendered="#{empty tacheBean.tachesDuProjet}" style="color: #666; font-style: italic;" />
+
+        <h:form id="listeTachesForm">
+            <h:dataTable value="#{tacheBean.tachesDuProjet}" var="t" rendered="#{not empty tacheBean.tachesDuProjet}"
+                         style="width: 100%; border-collapse: collapse; margin-top: 10px;" border="0" cellpadding="12">
+                
+                <h:column>
+                    <f:facet name="header">Tâche</f:facet>
+                    <strong style="color: #333;">#{t.titre}</strong>
+                    <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #666;">#{t.description}</p>
+                </h:column>
+                
+                <h:column style="width: 180px;">
+                    <f:facet name="header">Statut actuel</f:facet>
+                    <h:panelGroup id="badgeStatut">
+                        <span style="padding: 4px 8px; border-radius: 12px; font-size: 0.85em; font-weight: bold;
+                                     #{t.statut == 'A_FAIRE' ? 'background-color: #e2e3e5; color: #383d41;' : ''}
+                                     #{t.statut == 'EN_COURS' ? 'background-color: #fff3cd; color: #856404;' : ''}
+                                     #{t.statut == 'TERMINE' ? 'background-color: #d4edda; color: #155724;' : ''}">
+                            #{t.statut == 'A_FAIRE' ? 'À faire' : ''}
+                            #{t.statut == 'EN_COURS' ? 'En cours' : ''}
+                            #{t.statut == 'TERMINE' ? 'Terminé' : ''}
+                        </span>
+                    </h:panelGroup>
+                </h:column>
+                
+                <h:column style="width: 220px;">
+                    <f:facet name="header">Changer le statut</f:facet>
+                    <h:selectOneMenu value="#{t.statut}" style="padding: 5px; border-radius: 4px;">
+                        <f:selectItem itemValue="A_FAIRE" itemLabel="À faire" />
+                        <f:selectItem itemValue="EN_COURS" itemLabel="En cours" />
+                        <f:selectItem itemValue="TERMINE" itemLabel="Terminé" />
+                        <f:ajax listener="#{tacheBean.changerStatut(t, t.statut)}" render="badgeStatut" />
+                    </h:selectOneMenu>
+                </h:column>
+                
+                <h:column style="width: 100px; text-align: right;">
+                    <f:facet name="header">Action</f:facet>
+                    <h:commandButton value="Supprimer" action="#{tacheBean.supprimer(t.id)}"
+                                     onclick="if (!confirm('Supprimer cette tâche ?')) return false;"
+                                     style="padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em;" />
+                </h:column>
+                
+            </h:dataTable>
+        </h:form>
+    </div>
+    
+    <style>
+        th { background-color: #f8f9fa; color: #333; font-weight: bold; border-bottom: 2px solid #dee2e6; text-align: left; }
+        td { border-bottom: 1px solid #eee; }
+        tr:hover { background-color: #fafdff; }
+    </style>
+</h:body>
+</html>
